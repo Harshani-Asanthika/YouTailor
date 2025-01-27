@@ -1,0 +1,115 @@
+/* General Modal Styling */
+.modal-content {
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    font-size: 14px;
+}
+
+.modal-header {
+    border-bottom: none;
+}
+
+.modal-title {
+    font-size: 1.5rem;
+    color: #333;
+    font-weight: 600;
+}
+
+.modal-body {
+    padding: 2rem 2rem;
+}
+
+.tab-content {
+    margin-top: 1rem;
+}
+
+/* Styling Tabs */
+/* Styling Tabs */
+.nav-pills .nav-link {
+    border-radius: 3px;
+    width: 100%; /* Ensure each tab takes up 100% of the width */
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+    text-align: center; /* Center the text */
+}
+
+.nav-pills .nav-link.active {
+    background-color: #ff6f00;
+    color: white;
+}
+
+.nav-pills .nav-link:hover {
+    background-color: #1b1b1b;
+    color: white;
+}
+
+/* Form Styling */
+.form-group label {
+    font-weight: 600;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    color: #555;
+}
+
+.form-control {
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    padding: 0.5rem 1rem; /* Reduced height */
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.form-control:focus {
+    background-color: #e0e0e0;
+    box-shadow: none; /* Removed box shadow */
+}
+
+.form-control::placeholder {
+    font-size: 13px; /* Set placeholder text size */
+}
+
+/* Button Styling */
+button {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* Button Colors */
+button[type="submit"] {
+    background-color: #ff6f00;
+    color: white;
+}
+
+button[type="submit"]:hover {
+    background-color: rgb(39, 39, 39);
+}
+
+/* Responsive Design */
+@media (max-width: 767px) {
+    .modal-body {
+        padding: 1.5rem;
+    }
+
+    .nav-pills .nav-link {
+        padding: 0.4rem 1rem;
+    }
+
+    .modal-title {
+        font-size: 1.3rem;
+    }
+
+    .form-control {
+        font-size: 0.9rem;
+    }
+
+    button {
+        font-size: 0.9rem;
+    }
+}
