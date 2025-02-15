@@ -40,6 +40,10 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        'tailor' => [
+            'driver' => 'session',
+            'provider' => 'tailors'
+        ]
     ],
 
     /*
@@ -64,6 +68,10 @@ return [
             'driver' => 'eloquent',
             'model' => env('AUTH_MODEL', App\Models\User::class),
         ],
+        'tailors' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Tailor::class
+        ]
 
         // 'users' => [
         //     'driver' => 'database',
@@ -93,6 +101,13 @@ return [
     'passwords' => [
         'users' => [
             'provider' => 'users',
+            'table' => env('AUTH_PASSWORD_RESET_TOKEN_TABLE', 'password_reset_tokens'),
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+
+        'tailors' => [
+            'provider' => 'tailors',
             'table' => env('AUTH_PASSWORD_RESET_TOKEN_TABLE', 'password_reset_tokens'),
             'expire' => 60,
             'throttle' => 60,

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Layout, Menu, Tabs, Table, Tag, Modal, Button, Card, Row, Col, Avatar, Form, Input, Upload, message } from "antd";
-import { DashboardOutlined, ShoppingOutlined, UserOutlined, UploadOutlined, EditOutlined } from "@ant-design/icons";
+import { DashboardOutlined, ShoppingOutlined, UserOutlined, UploadOutlined, EditOutlined, LogoutOutlined } from "@ant-design/icons";
+import { Link } from "@inertiajs/react";
 
 const { Header, Sider, Content } = Layout;
 
@@ -76,6 +77,12 @@ const AdminDashboard = () => {
           <Menu.Item key="dashboard" icon={<DashboardOutlined />}>Dashboard</Menu.Item>
           <Menu.Item key="orders" icon={<ShoppingOutlined />}>Orders</Menu.Item>
           <Menu.Item key="profile" icon={<UserOutlined />}>Profile</Menu.Item>
+          <Menu.Item key="logout" icon={<LogoutOutlined />}>
+          <Link href="/tailor-panel/logout">
+          Logout
+          </Link>
+          </Menu.Item>
+          
         </Menu>
       </Sider>
 
