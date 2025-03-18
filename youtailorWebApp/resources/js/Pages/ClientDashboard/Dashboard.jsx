@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Layout, Menu, Table, Card, Row, Col, Avatar, Form, Input, Button, Upload, Tabs, message } from "antd";
-import { ShoppingCartOutlined, UserOutlined, PlusCircleOutlined, DashboardOutlined, UploadOutlined, EditOutlined } from "@ant-design/icons";
+import { ShoppingCartOutlined, UserOutlined, PlusCircleOutlined, DashboardOutlined, UploadOutlined, EditOutlined, LogoutOutlined } from "@ant-design/icons";
 import moment from "moment"; // Import moment for formatting time
+import { Link } from "@inertiajs/react";
 
 const { Header, Sider, Content } = Layout;
 
@@ -38,6 +39,11 @@ const ClientPanel = () => {
           <Menu.Item key="orders" icon={<ShoppingCartOutlined />}>My Orders</Menu.Item>
           <Menu.Item key="placeOrder" icon={<PlusCircleOutlined />}>Place Order</Menu.Item>
           <Menu.Item key="profile" icon={<UserOutlined />}>Profile</Menu.Item>
+          <Menu.Item key="logout" icon={<LogoutOutlined />}>
+          <Link href="/client-panel/logout">
+          Logout
+          </Link>
+          </Menu.Item>
         </Menu>
       </Sider>
 
@@ -74,6 +80,7 @@ const ClientPanel = () => {
                   </Tabs.TabPane>
                 ))}
               </Tabs>
+              
             </Card>
           )}
 

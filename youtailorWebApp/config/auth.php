@@ -43,6 +43,11 @@ return [
         'tailor' => [
             'driver' => 'session',
             'provider' => 'tailors'
+        ],
+
+        'client' => [
+            'driver' => 'session',
+            'provider' => 'clients'
         ]
     ],
 
@@ -71,6 +76,10 @@ return [
         'tailors' => [
             'driver' => 'eloquent',
             'model' => App\Models\Tailor::class
+        ],
+        'clients' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Client::class
         ]
 
         // 'users' => [
@@ -108,6 +117,13 @@ return [
 
         'tailors' => [
             'provider' => 'tailors',
+            'table' => env('AUTH_PASSWORD_RESET_TOKEN_TABLE', 'password_reset_tokens'),
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+
+        'clients' => [
+            'provider' => 'clients',
             'table' => env('AUTH_PASSWORD_RESET_TOKEN_TABLE', 'password_reset_tokens'),
             'expire' => 60,
             'throttle' => 60,

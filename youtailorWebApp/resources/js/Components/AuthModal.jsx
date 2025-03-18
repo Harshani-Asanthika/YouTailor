@@ -1,98 +1,192 @@
-import React from 'react';
-import { Modal, Tab, Nav, Button, Form, Row, Col } from 'react-bootstrap';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { Modal, Tabs, Form, Input, Button, Row, Col, notification } from 'antd';
 import '../../css/AuthModal.css';
 
+const { TabPane } = Tabs;
+
 const AuthModal = ({ show, onHide }) => {
+  const [form] = Form.useForm();
+  const [isLoading, setIsLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState("signin");
+
+  useEffect(() => {
+    const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+    if (token) {
+      axios.defaults.headers.common['X-CSRF-TOKEN'] = token;
+    }
+  }, []);
+
+  const openNotification = (type, message) => {
+    notification[type]({
+      message: type === 'success' ? 'Success' : 'Error',
+      description: message,
+    });
+  };
+
+  const handleSubmit = async (values) => {
+    setIsLoading(true);
+
+    try {
+      const url = activeTab === "signin" ? "/client-panel/signin/process" : "/client-panel/signup/process";
+      const response = await axios.post(url, values);
+
+      if (response.data.success) {
+        notification.success({ message: 'Success', description: response.data.message });
+
+        if (activeTab === "signup") {
+          setActiveTab("signin"); // Switch to login form
+          form.resetFields();
+        } else {
+          setTimeout(() => {
+            onHide(); // Close modal after successful login
+            window.location.href = response.data.redirect; // Redirect to /client-panel
+        }, 2000); // Redirect after 2 seconds
+          
+        }
+      } else {
+        notification.error({ message: 'Error', description: response.data.message });
+      }
+    } catch (error) {
+      if (error.response && error.response.data.errors) {
+        Object.keys(error.response.data.errors).forEach((key) => {
+          openNotification('error', error.response.data.errors[key][0]);
+        });
+      } else {
+        openNotification('error', 'An unexpected error occurred! Please try again.');
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
-    <Modal show={show} onHide={onHide} centered>
-      <Modal.Header closeButton>
-       
-      </Modal.Header>
-      <Modal.Body>
-        <Tab.Container defaultActiveKey="signin">
-          {/* Tabs for Sign In and Sign Up */}
-          <Nav variant="pills" className="justify-content-center mb-3  ">
-            <Nav.Item>
-              <Nav.Link eventKey="signin" className="">Sign In</Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
-              <Nav.Link eventKey="signup">Sign Up</Nav.Link>
-            </Nav.Item>
-          </Nav>
+    <Modal visible={show} onCancel={onHide} centered footer={null}>
+      <Tabs activeKey={activeTab} onChange={setActiveTab}>
+        {/* Sign In Tab */}
+        <TabPane tab="Sign In" key="signin">
+          <Form
+            name="signin"
+            onFinish={handleSubmit}
+            layout="vertical"
+            initialValues={{ username: "", password: "" }}
+          >
+            <Form.Item
+              name="username"
+              label="Username"
+              rules={[{ required: true, message: 'Please enter your username!' }]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              name="password"
+              label="Password"
+              rules={[{ required: true, message: 'Please enter your password!' }]}
+            >
+              <Input.Password />
+            </Form.Item>
+            <Form.Item>
+              <Button type="primary" htmlType="submit" block loading={isLoading}>
+                {isLoading ? 'Signing In...' : 'Sign In'}
+              </Button>
+            </Form.Item>
+          </Form>
+        </TabPane>
 
-          <Tab.Content>
-            {/* Sign In Form */}
-            <Tab.Pane eventKey="signin">
-              <Form>
-                <Form.Group className="mb-3" controlId="signinEmail">
-                  <Form.Label>Email address</Form.Label>
-                  <Form.Control type="email" placeholder="Enter email" />
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="signinPassword">
-                  <Form.Label>Password</Form.Label>
-                  <Form.Control type="password" placeholder="Password" />
-                </Form.Group>
-                <Button type="submit">
-                  Sign In
-                </Button>
-              </Form>
-            </Tab.Pane>
-
-            {/* Sign Up Form */}
-            <Tab.Pane eventKey="signup">
-              <Form>
-                <Row>
-                  <Col xs={12} md={6}>
-                    <Form.Group className="mb-3" controlId="signupFirstName">
-                      <Form.Label>First Name</Form.Label>
-                      <Form.Control type="text" placeholder="Enter your first name" />
-                    </Form.Group>
-                  </Col>
-                  <Col xs={12} md={6}>
-                    <Form.Group className="mb-3" controlId="signupLastName">
-                      <Form.Label>Last Name</Form.Label>
-                      <Form.Control type="text" placeholder="Enter your last name" />
-                    </Form.Group>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col xs={12} md={6}>
-                    <Form.Group className="mb-3" controlId="signupMobile">
-                      <Form.Label>Mobile</Form.Label>
-                      <Form.Control type="tel" placeholder="Enter your mobile number" />
-                    </Form.Group>
-                  </Col>
-                  <Col xs={12} md={6}>
-                    <Form.Group className="mb-3" controlId="signupEmail">
-                      <Form.Label>Email address</Form.Label>
-                      <Form.Control type="email" placeholder="Enter your email" />
-                    </Form.Group>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col xs={12}>
-                    <Form.Group className="mb-3" controlId="signupAddress">
-                      <Form.Label>Address</Form.Label>
-                      <Form.Control as="textarea" rows={2} placeholder="Enter your address" />
-                    </Form.Group>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col xs={12} md={6}>
-                    <Form.Group className="mb-3" controlId="signupPassword">
-                      <Form.Label>Password</Form.Label>
-                      <Form.Control type="password" placeholder="Enter a secure password" />
-                    </Form.Group>
-                  </Col>
-                </Row>
-                <Button  type="submit">
-                  Sign Up
-                </Button>
-              </Form>
-            </Tab.Pane>
-          </Tab.Content>
-        </Tab.Container>
-      </Modal.Body>
+        {/* Sign Up Tab */}
+        <TabPane tab="Sign Up" key="signup">
+          <Form
+            form={form}
+            name="signup"
+            onFinish={handleSubmit}
+            layout="vertical"
+          >
+            <Row gutter={16}>
+              <Col span={12}>
+                <Form.Item
+                  name="firstName"
+                  label="First Name"
+                  rules={[{ required: true, message: 'Please enter your first name!' }]}
+                >
+                  <Input />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item
+                  name="lastName"
+                  label="Last Name"
+                  rules={[{ required: true, message: 'Please enter your last name!' }]}
+                >
+                  <Input />
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row gutter={16}>
+              <Col span={12}>
+                <Form.Item
+                  name="mobile"
+                  label="Mobile"
+                  rules={[{ required: true, message: 'Please enter your mobile number!' }]}
+                >
+                  <Input />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item
+                  name="email"
+                  label="Email"
+                  rules={[{ required: true, message: 'Please enter your email!' }, { type: 'email', message: 'Invalid email format!' }]}
+                >
+                  <Input />
+                </Form.Item>
+              </Col>
+            </Row>
+            <Form.Item
+              name="address"
+              label="Address"
+              rules={[{ required: true, message: 'Please enter your address!' }]}
+            >
+              <Input.TextArea rows={2} />
+            </Form.Item>
+            <Row gutter={16}>
+              <Col span={12}>
+                <Form.Item
+                  name="password"
+                  label="Password"
+                  rules={[{ required: true, message: 'Please enter your password!' }]}
+                >
+                  <Input.Password />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item
+                  name="confirmPassword"
+                  label="Confirm Password"
+                  dependencies={['password']}
+                  rules={[
+                    { required: true, message: 'Please confirm your password!' },
+                    ({ getFieldValue }) => ({
+                      validator(_, value) {
+                        if (!value || getFieldValue('password') === value) {
+                          return Promise.resolve();
+                        }
+                        return Promise.reject(new Error('Passwords do not match!'));
+                      },
+                    }),
+                  ]}
+                >
+                  <Input.Password />
+                </Form.Item>
+              </Col>
+            </Row>
+            <Form.Item>
+              <Button type="primary" htmlType="submit" block loading={isLoading}>
+                {isLoading ? 'Signing Up...' : 'Sign Up'}
+              </Button>
+            </Form.Item>
+          </Form>
+        </TabPane>
+      </Tabs>
     </Modal>
   );
 };

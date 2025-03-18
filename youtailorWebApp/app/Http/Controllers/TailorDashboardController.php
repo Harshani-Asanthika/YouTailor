@@ -38,11 +38,11 @@ class TailorDashboardController extends Controller
         // ]);
 
         $validator = Validator::make($request->all(),[
-                 'firstName' => 'required|string|max:255',
+           'firstName' => 'required|string|max:255',
            'lastName' => 'required|string|max:255',
-          'email' => 'required|email|unique:tailor_details,email',
-          'confirmPassword' => 'required',
-            'password' => 'required|string|min:6|same:confirmPassword',  // Ensure 'password_confirmation' field in the form
+           'email' => 'required|email|unique:tailor_details,email',
+           'confirmPassword' => 'required',
+           'password' => 'required|string|min:6|same:confirmPassword',  // Ensure 'password_confirmation' field in the form
         ]);
 
         if($validator->fails()){
@@ -89,7 +89,7 @@ class TailorDashboardController extends Controller
             ]);
         }
 
-        $tailor = Tailor::get();
+        // $tailor = Tailor::get();
 
 
         
@@ -127,7 +127,11 @@ class TailorDashboardController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Login successfully'
+
+                
             ]);
+
+          
         }else{
 
             return response()->json([
@@ -152,8 +156,8 @@ class TailorDashboardController extends Controller
     }
 
 
-    public function view(){
+    // public function view(){
 
-        return Tailor::get();
-    }
+    //     return Tailor::get();
+    // }
 }
