@@ -1,10 +1,13 @@
 <?php
 
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\TailorDashboardController;
-use App\Http\Controllers\ClientDashboardController;
-use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\DesignController;
+use App\Http\Controllers\ClientDashboardController;
+use App\Http\Controllers\TailorDashboardController;
+use App\Http\Middleware\EnsureClientIsAuthenticated;
+
 
 
 
@@ -19,11 +22,6 @@ Route::post('tailor-panel/signin/process', [TailorDashboardController::class, 's
 Route::get('tailor-panel/logout', [TailorDashboardController::class, 'logout']);
 
 
-//Client routes
-Route::get('client-panel', [ClientDashboardController::class, 'clientPanelView'])->name('client.clientPanelView');
-Route::post('client-panel/signup/process', [ClientDashboardController::class, 'clientPanelSignupProcess']);
-Route::post('client-panel/signin/process', [ClientDashboardController::class, 'clientPanelSigninProcess']);
-Route::get('client-panel/logout', [ClientDashboardController::class, 'clientlogout']);
 
 
 Route::group(['middleware' => 'AuthCheck'],function(){
@@ -37,3 +35,18 @@ Route::group(['middleware' => 'AuthCheck'],function(){
     
 
 });
+
+Route::get('client-panel/signin', [ClientDashboardController::class, 'clientPanelSignin']);
+  
+Route::get('client-panel/signup', [ClientDashboardController::class, 'clientPanelSignup']);
+Route::group(['middleware' => 'EnsureClientIsAuthenticated'], function () {
+    Route::get('client-panel', [ClientDashboardController::class, 'clientPanelView'])->name('client.clientPanelView');
+    Route::post('client-panel/signup/process', [ClientDashboardController::class, 'clientPanelSignupProcess']);
+    Route::post('client-panel/signin/process', [ClientDashboardController::class, 'clientPanelSigninProcess']);
+    Route::get('client-panel/logout', [ClientDashboardController::class, 'clientlogout']);
+  
+});
+
+//Customize routes
+Route::get('design', [DesignController::class, '<startDesig></startDesig>
+<div class=""></div>n'])->name('design.startDesign');

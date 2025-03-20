@@ -3,15 +3,27 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class Client extends Authenticatable
 {
     use HasFactory;
 
-    protected $fillable = ['username','first_name', 'last_name', 'mobile', 'email', 'address', 'password'];
+    // Specify the table name
+    protected $table = "client_details"; // Ensure this points to the `clients` table
 
-    protected $hidden = ['password'];
+    // Fields that can be mass-assigned
+    protected $fillable = [
+        'first_name',
+        'last_name',
+        'email',
+        'mobile',
+        'password',
+    ];
+
+    // Fields to hide when serializing the model
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
 }
-

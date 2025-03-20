@@ -11,13 +11,16 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
+        // Append middleware to the 'web' group
         $middleware->web(append: [
             \App\Http\Middleware\HandleInertiaRequests::class,
             \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
         ]);
 
+        // Register middleware aliases
         $middleware->alias([
-            'AuthCheck' => \App\Http\Middleware\AuthCheck::class
+            'AuthCheck' => \App\Http\Middleware\AuthCheck::class,
+            'EnsureClientIsAuthenticated' => \App\Http\Middleware\EnsureClientIsAuthenticated::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

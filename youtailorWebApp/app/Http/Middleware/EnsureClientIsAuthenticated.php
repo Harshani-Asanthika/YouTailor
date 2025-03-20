@@ -7,25 +7,27 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class AuthCheck
+class EnsureClientIsAuthenticated
 {
     /**
      * Handle an incoming request.
      *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Closure  $next
+     * @return mixed
      */
     public function handle(Request $request, Closure $next): Response
     {
+        // Check if the user is authenticated using the 'client' guard
 
-        if(Auth::guard('tailor')->check()){
+        if(Auth::guard('client')->check()){
 
             return $next($request);
             
         }else{
 
-            return redirect('/tailor-panel/signin');
+            return redirect('client-panel/signin');
         }
         
-       
     }
 }

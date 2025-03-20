@@ -17,10 +17,25 @@ class ClientDashboardController extends Controller
      * Show the client panel dashboard.
      */
     public function clientPanelView()
-    
     {
-        return Inertia::render('ClientDashboard/Dashboard');
-       
+        // Get the authenticated client
+        $client = Auth::guard('client')->user();
+
+        // Pass the client's name (or full data) to the Inertia view
+        return Inertia::render('ClientDashboard/Dashboard', [
+            'client' => [
+                'name' => $client->first_name . ' ' . $client->last_name, // Concatenate first and last name
+                'email' => $client->email,
+                'mobile' => $client->mobile,
+            ],
+        ]);
+    }
+
+    public function clientPanelSignup(){
+        return Inertia::render('ClientDashboard/Signup');
+    }
+    public function clientPanelSignin(){
+        return Inertia::render('ClientDashboard/Signin');
     }
 
     /**
@@ -70,60 +85,51 @@ class ClientDashboardController extends Controller
         }
     }
 
-    public function clientPanelSigninProcess(request $request)
+    /**
+     * Handle client sign-in process.
+     */
+    public function clientPanelSigninProcess(Request $request)
     {
-
-        $validator  = Validator::make($request->all(), [
+        $validator = Validator::make($request->all(), [
             'username' => 'required',
             'password' => 'required'
         ]);
 
-
         if ($validator->fails()) {
-
             return response()->json([
                 'success' => false,
                 'message' => $validator->errors()->first()
             ]);
         }
 
-
         try {
-
             if (Auth::guard('client')->attempt(['username' => $request->username, 'password' => $request->password])) {
-
-
-
                 return response()->json([
                     'success' => true,
                     'message' => 'Login successfully',
                     'redirect' => url('/client-panel')
-                   
                 ]);
             } else {
-
                 return response()->json([
                     'success' => false,
-                    'message' => 'incorrect Username or password'
+                    'message' => 'Incorrect username or password'
                 ]);
             }
         } catch (Exception $e) {
-
-            Log::error("Error occurred while sign in client" . $e->getMessage());
+            Log::error("Error occurred while signing in client: " . $e->getMessage());
             return response()->json([
                 'status' => false,
-                'message' =>  'Server Error'
+                'message' => 'Server Error'
             ]);
         }
     }
 
-    public function clientlogout(){
-
-
+    /**
+     * Handle client logout.
+     */
+    public function clientlogout()
+    {
         Auth::guard('client')->logout();
-
-
         return redirect('/');
     }
-
 }
