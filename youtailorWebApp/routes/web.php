@@ -48,5 +48,4 @@ Route::group(['middleware' => 'EnsureClientIsAuthenticated'], function () {
 });
 
 //Customize routes
-Route::get('design', [DesignController::class, '<startDesig></startDesig>
-<div class=""></div>n'])->name('design.startDesign');
+Route::get('design', [DesignController::class, 'startDesign'])->name('design.startDesign');
