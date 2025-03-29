@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { message, Form, Input, Button, Row, Col, Card } from 'antd';
-import { UserOutlined, MailOutlined, LockOutlined, PhoneOutlined } from '@ant-design/icons';
+import { UserOutlined, MailOutlined, LockOutlined } from '@ant-design/icons';
 import axios from 'axios';
 
 function Signup() {
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
+    mobile:'',
+    address:'',
     username: '',
     email: '',
-    mobile: '',
-    password: '',
-    confirmPassword: '',
+    password: ''
   });
 
   const [alert, setAlert] = useState('');
@@ -25,26 +25,22 @@ function Signup() {
   }, []);
 
   const handleSubmit = async (values) => {
-    const { firstName, lastName, username, email,mobile, password, confirmPassword } = values;
-    console.log(values);
     try {
       const response = await axios.post('/client-panel/signup/process', values);
-
+  
       if (response.data.success) {
         message.success(response.data.message);
-        // Optionally, redirect after successful sign-up
+        // Redirect to signin page after 2 seconds
+        setTimeout(() => {
+          window.location.href = '/client-panel/signin';
+        }, 2000);
       } else {
         message.error(response.data.message);
-        console.log(response.data.message);
       }
     } catch (error) {
-
-
       message.error('An error occurred! Please try again.');
-
     }
   };
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevState) => ({
@@ -86,7 +82,34 @@ function Signup() {
                     />
                   </Form.Item>
                 </Col>
+                
               </Row>
+
+              <Row gutter={16}>
+                <Col span={12}>
+                <Form.Item label="Mobile" name="mobile" rules={[{ required: true, message: 'Please enter your Mobile Number!' }]}>
+                    <Input
+                      prefix={<phoneOutlined />}
+                      placeholder="Enter your mobile number"
+                      value={formData.mobile}
+                      onChange={handleChange}
+                    />
+                  </Form.Item>
+                </Col>
+                <Col span={12}>
+                <Form.Item label="Address" name="address" rules={[{ required: true, message: 'Please enter your address!' }]}>
+                    <Input
+                      prefix={<phoneOutlined />}
+                      placeholder="Enter your address"
+                      value={formData.address}
+                      onChange={handleChange}
+                    />
+                  </Form.Item>
+                </Col>
+                
+              </Row>
+
+ 
 
 
 
@@ -98,20 +121,6 @@ function Signup() {
                   onChange={handleChange}
                 />
               </Form.Item>
-
-              <Form.Item
-  label="Mobile"
-  name="mobile"
-  rules={[
-    { required: true, message: 'Please enter your mobile number!' },
-    { pattern: /^\d{10}$/, message: 'Mobile number must be 10 digits!' },
-  ]}
->
-  <Input
-    prefix={<PhoneOutlined />} // Corrected icon name
-    placeholder="Enter your mobile"
-  />
-</Form.Item>
 
               <Form.Item label="Password" name="password" rules={[{ required: true, message: 'Please enter your password!' }]}>
                 <Input.Password
@@ -138,7 +147,7 @@ function Signup() {
               </Form.Item>
             </Form>
             <div style={{ textAlign: 'center', marginTop: '10px' }}>
-              Already have an account? <a href="/tailor-panel/signin">Sign In</a>
+              Already have an account? <a href="/client-panel/signin">Sign In</a>
             </div>
           </Card>
         </Col>

@@ -1,114 +1,102 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Button, Container, Row, Col, Card } from 'react-bootstrap';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Link } from '@inertiajs/react';
+import { Inertia } from '@inertiajs/inertia';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import AuthModal from '../components/AuthModal'; // Import AuthModal
-import AOS from 'aos'; // For animation
-import 'aos/dist/aos.css'; // Import AOS CSS
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
-// css folder
+// Import Custom CSS
 import '../../css/HeroSection.css';
 
 const Index = () => {
-  const [showAuthModal, setShowAuthModal] = useState(false);
-
   useEffect(() => {
-    AOS.init();
+    AOS.init({ duration: 1000, once: true });
   }, []);
-
-  const handleAuthModalToggle = () => setShowAuthModal((prev) => !prev);
 
   return (
     <div>
-      <Navbar onSignInClick={handleAuthModalToggle} /> {/* Pass the handler to Navbar */}
+      <Navbar />
 
       {/* Hero Section */}
-      <section className="hero-section d-flex align-items-center">
+      <section className="hero-section text-white text-center d-flex align-items-center">
         <Container>
-          <Row>
-            <Col lg={6}>
-              <h1 className="hero-title" data-aos="fade-up" data-aos-duration="1500">
+          <Row className="align-items-center">
+            <Col lg={6} data-aos="fade-right">
+              <h1 className="hero-title" style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 700 }}>
                 Create Your Perfect Garment
               </h1>
-              <p className="hero-subtitle" data-aos="fade-up" data-aos-duration="1800">
+              <p className="hero-subtitle" style={{ fontFamily: 'Open Sans, sans-serif', fontSize: '1.2rem' }}>
                 Choose from a variety of fabrics, styles, and customizations to design your own clothes.
               </p>
-              <Button
-  className="hero-button"
-  size="lg"
-  data-aos="zoom-in"
-  data-aos-duration="2000"
-  onClick={() => Inertia.visit('/dress-customizer')}
->
-  Start Designing
-</Button>
+              <Link href="/design">
+                <Button
+                  className="hero-button"
+                  size="lg"
+                  style={{ fontFamily: 'Poppins, sans-serif', fontSize: '1rem', padding: '10px 20px' }}
+                  data-aos="zoom-in"
+                  data-aos-duration="2000"
+                >
+                  Start Designing
+                </Button>
+              </Link>
             </Col>
           </Row>
         </Container>
       </section>
 
       {/* Features Section */}
-      <section id="features" className="py-5" style={{ backgroundColor: "#f8f9fa" }}>
+      <section id="features" className="py-5 bg-light">
         <Container>
-          <h2 className="text-center mb-4" data-aos="fade-up" data-aos-duration="1500">
+          <h2 className="text-center mb-4" data-aos="fade-up" style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 600 }}>
             Why Choose Us?
           </h2>
-          <Row>
-            <Col md={4} data-aos-duration="1800">
-              <Card>
-                <Card.Body>
-                  <h5>Custom Designs</h5>
-                  <p>Design clothes tailored exactly to your preferences, from fabric to fit.</p>
-                </Card.Body>
-              </Card>
-            </Col>
-            <Col md={4} data-aos="fade-up" data-aos-duration="1800">
-              <Card>
-                <Card.Body>
-                  <h5>Wide Range of Fabrics</h5>
-                  <p>Choose from a variety of fabrics to match your style and comfort.</p>
-                </Card.Body>
-              </Card>
-            </Col>
-            <Col md={4} data-aos="fade-up" data-aos-duration="1800">
-              <Card>
-                <Card.Body>
-                  <h5>Fast Delivery</h5>
-                  <p>Get your custom-designed clothes delivered to your doorstep in no time.</p>
-                </Card.Body>
-              </Card>
-            </Col>
+          <Row className="g-4">
+            {[
+              { title: 'Custom Designs', text: 'Design clothes tailored exactly to your preferences.', icon: '🎨' },
+              { title: 'Premium Fabrics', text: 'Choose from high-quality fabrics for style and comfort.', icon: '🧵' },
+              { title: 'Fast Delivery', text: 'Receive your custom-designed clothes quickly.', icon: '🚀' }
+            ].map((feature, index) => (
+              <Col md={4} key={index} data-aos="fade-up" data-aos-delay={index * 200}>
+                <Card className="shadow-lg border-0 text-center p-4" style={{ minHeight: '220px' }}>
+                  <h1>{feature.icon}</h1>
+                  <h5 className="mt-3" style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 600 }}>
+                    {feature.title}
+                  </h5>
+                  <p style={{ fontFamily: 'Open Sans, sans-serif', fontSize: '1rem' }}>{feature.text}</p>
+                </Card>
+              </Col>
+            ))}
           </Row>
         </Container>
       </section>
 
       {/* Call to Action Section */}
-      <section id="cta" className="py-5" style={{ backgroundColor: "#f1f1f1" }}>
+      <section id="cta" className="py-5 text-center" style={{ backgroundColor: '#f1f1f1' }}>
         <Container>
-          <Row>
-            <Col lg={6} data-aos="fade-up" data-aos-duration="1500">
-              <h2>Ready to Design Your Custom Clothes?</h2>
-              <p>
-                Get started with our easy-to-use platform, and design your perfect garment today!
+          <Row className="align-items-center">
+            <Col lg={6} data-aos="fade-right">
+              <h2 style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 600 }}>
+                Ready to Design Your Custom Clothes?
+              </h2>
+              <p style={{ fontFamily: 'Open Sans, sans-serif', fontSize: '1.1rem' }}>
+                Start creating your own unique style with our easy-to-use platform.
               </p>
             </Col>
-            <Col
-              lg={6}
-              className="d-flex align-items-center justify-content-center"
-              data-aos="fade-up"
-              data-aos-duration="1500"
-            >
-              <Button variant="primary" size="lg" href="#design">
+            <Col lg={6} data-aos="fade-left">
+              <Button
+                className="cta-button"
+                size="lg"
+                style={{ fontFamily: 'Poppins, sans-serif', fontSize: '1rem', padding: '10px 20px' }}
+                onClick={() => Inertia.visit('/design')}
+              >
                 Start Designing
               </Button>
             </Col>
           </Row>
         </Container>
       </section>
-
-      {/* Auth Modal */}
-      <AuthModal show={showAuthModal} onHide={handleAuthModalToggle} />
 
       <Footer />
     </div>

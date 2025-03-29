@@ -12,4 +12,14 @@ class DesignController extends Controller
     {
         return Inertia::render('Customizer/DressCustomizer');
     }
+
+    public function pickDress()
+    {
+        return Inertia::render('Customizer/DressPicker');
+    }
+    
+    public function startDesignTrouser()
+    {
+        return Inertia::render('Customizer/TrouserCustomizer');
+    }
 }

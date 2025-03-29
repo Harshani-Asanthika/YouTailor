@@ -95,7 +95,7 @@ message.error("Network error");
               </Form.Item>
             </Form>
             <div style={{ textAlign: 'center', marginTop: '10px' }}>
-              Don't have an account? <a href="/tailor-panel/signup">Sign Up</a>
+              Don't have an account? <a href="/client-panel/signup">Sign Up</a>
             </div>
           </Card>
         </Col>

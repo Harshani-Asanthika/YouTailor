@@ -2,25 +2,59 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
+use Inertia\Inertia;
+use App\Models\Order;
 use App\Models\Tailor;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
-use App\Models\TailorDetail;  // Add the model for your table
-use Exception;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
+
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use App\Models\TailorDetail;  // Add the model for your table
 
 class TailorDashboardController extends Controller
 {
-    // Display Tailor Dashboard View
-    public function tailorPanelView()
-    {
-        return Inertia::render('TailorDashboard/Dashboard');
-    }
+  // In your controller
+public function tailorPanelView()
+{
+    $orders = Order::with(['client' => function($query) {
+            $query->select('client_id', 'fname', 'lname', 'mobile', 'address', 'username');
+        }])
+        ->orderBy('created_at', 'desc')
+        ->get()
+        ->map(function ($order) {
+            return [
+                'id' => $order->id,
+                'cloth_name' => $order->cloth_name,
+                'size' => $order->size,
+                'quantity' => $order->quantity,
+                'status' => $order->status,
+                'instructions' => $order->instructions,
+                'design_image' => $order->design_image 
+                    ? asset(Storage::url($order->design_image))
+                    : null,
+                'created_at' => $order->created_at,
+                'updated_at' => $order->updated_at,
+                'client' => $order->clientDetails ? [
+                    'id' => $order->clientDetails->client_id,
+                    'fname' => $order->clientDetails->fname,
+                    'lname' => $order->clientDetails->lname,
+                    'mobile' => $order->clientDetails->mobile,
+                    'address' => $order->clientDetails->address,
+                    'username' => $order->clientDetails->username,
+                    'full_name' => $order->clientDetails->fname . ' ' . $order->clientDetails->lname,
+                ] : null,
+            ];
+        });
 
-    // Display Tailor Sign-Up Form
+    return Inertia::render('TailorDashboard/Dashboard', [
+        'orders' => $orders,
+        'user' => Auth::guard('tailor')->user(),
+    ]);
+}// Display Tailor Sign-Up Form
     public function tailorPanelSignup()
     {
         return Inertia::render('TailorDashboard/Signup');
