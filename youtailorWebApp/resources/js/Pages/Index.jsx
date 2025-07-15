@@ -30,7 +30,7 @@ const Index = () => {
               <p className="hero-subtitle" style={{ fontFamily: 'Open Sans, sans-serif', fontSize: '1.2rem' }}>
                 Choose from a variety of fabrics, styles, and customizations to design your own clothes.
               </p>
-              <Link href="/design">
+              <Link href="/pick/category">
                 <Button
                   className="hero-button"
                   size="lg"
@@ -72,6 +72,8 @@ const Index = () => {
         </Container>
       </section>
 
+      
+
       {/* Call to Action Section */}
       <section id="cta" className="py-5 text-center" style={{ backgroundColor: '#f1f1f1' }}>
         <Container>
@@ -85,14 +87,18 @@ const Index = () => {
               </p>
             </Col>
             <Col lg={6} data-aos="fade-left">
-              <Button
-                className="cta-button"
-                size="lg"
-                style={{ fontFamily: 'Poppins, sans-serif', fontSize: '1rem', padding: '10px 20px' }}
-                onClick={() => Inertia.visit('/design')}
-              >
-                Start Designing
-              </Button>
+             <Link href="/pick/dress">
+          
+                <Button
+                  className="hero-button"
+                  size="lg"
+                  style={{ fontFamily: 'Poppins, sans-serif', fontSize: '1rem', padding: '10px 20px' }}
+                  data-aos="zoom-in"
+                  data-aos-duration="2000"
+                >
+                  Start Designing
+                </Button>
+              </Link>
             </Col>
           </Row>
         </Container>

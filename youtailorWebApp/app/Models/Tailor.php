@@ -2,31 +2,36 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class Tailor extends Authenticatable
 {
-    use HasFactory;
-    
-    protected $table = "tailor_details";
+    use HasFactory, Notifiable;
 
-    // Allow mass-assignment for these fields
+    // --- Add or update this line! ---
+    protected $table = 'tailor_details'; // <--- THIS IS THE FIX
+
+    protected $primaryKey = 'id'; // Assuming 'id' is your primary key. If it's 'tailor_id', change this line too.
+
     protected $fillable = [
-        'fname', 'lname', 'username', 'email', 'password'
+        'fname',
+        'lname',
+        'email',
+        'username',
+        'password',
+        'mobile',
+        'address',
+        'avatar',
     ];
 
     protected $hidden = [
         'password',
-        'username'
+        'remember_token',
     ];
 
-    public function setPasswordAttribute($value){
-
-        $this->attributes['password'] = Hash::make($value);
-    }
-
-
+    // ... other methods/relationships for your Tailor model
 }

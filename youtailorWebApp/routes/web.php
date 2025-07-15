@@ -20,9 +20,14 @@ Route::post('tailor-panel/signup/process', [TailorDashboardController::class, 't
 Route::get('tailor-panel/signin', [TailorDashboardController::class, 'tailorPanelSignin'])->name('tailor.tailorPanelSignin');
 Route::post('tailor-panel/signin/process', [TailorDashboardController::class, 'signin_process']);
 Route::get('tailor-panel/logout', [TailorDashboardController::class, 'logout']);
+// Assuming you also have a route to handle profile updates (usually POST)
+Route::post('tailor/profile', [TailorDashboardController::class, 'updateProfile'])
+    ->name('tailor.profile.update');
 
 
+Route::post('/tailor/orders/{order}/status', [OrderController::class, 'updateStatus'])
 
+    ->name('tailor.orders.updateStatus');
 
 Route::group(['middleware' => 'AuthCheck'], function () {
 
@@ -38,17 +43,18 @@ Route::get('client-panel/signup', [ClientDashboardController::class, 'clientPane
 Route::get('client-panel/signin', [ClientDashboardController::class, 'clientPanelSignin']);
 Route::post('client-panel/signup/process', [ClientDashboardController::class, 'clientPanelSignupProcess']);
 Route::post('client-panel/signin/process', [ClientDashboardController::class, 'clientPanelSigninProcess']);
-Route::group(['middleware' => 'EnsureClientIsAuthenticated'], function () { 
-Route::get('client-panel/logout', [ClientDashboardController::class, 'clientlogout']);
-Route::get('client-panel', [ClientDashboardController::class, 'clientPanelView'])->name('client.clientPanelView');
-
+Route::group(['middleware' => 'EnsureClientIsAuthenticated'], function () {
+    Route::get('client-panel/logout', [ClientDashboardController::class, 'clientlogout']);
+    Route::get('client-panel', [ClientDashboardController::class, 'clientPanelView'])->name('client.clientPanelView');
 });
 
 //Customize routes
-Route::get('design', [DesignController::class, 'startDesign'])->name('design.startDesign');
-Route::get('design/trouser', [DesignController::class, 'startDesignTrouser'])->name('design.startDesignTrouser');
+Route::get('tshirt-customizer', [DesignController::class, 'startDesign'])->name('design.startDesign');
+Route::get('gown-customizer', [DesignController::class, 'startDesignFrock'])->name('design.startDesignFrock');
 Route::get('pick/dress', [DesignController::class, 'pickDress'])->name('design.pickDress');
-
+Route::get('pant-customizer-male', [DesignController::class, 'designTrouserMale'])->name('design.designTrouserMale');
+Route::get('pant-customizer-female', [DesignController::class, 'designPantFemale'])->name('design.designTrouserFemale');
+Route::get('pick/category', [DesignController::class, 'pickCategory'])->name('design.pickCategory');
 
 
 Route::post('client/orders', [ClientDashboardController::class, 'placeOrder']);

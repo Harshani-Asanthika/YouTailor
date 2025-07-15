@@ -90,9 +90,8 @@ const DesignButton = styled.button`
 function DressPicker() {
   return (
     <>
-      <Navbar />
       <DressPickerContainer>
-        <Title>Design Your Outfit</Title>
+        <Title className='mt-5'>Design Your Outfit</Title>
         <CardsContainer>
           {/* T-Shirt Design Card */}
           <Card>
